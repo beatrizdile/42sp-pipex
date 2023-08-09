@@ -29,7 +29,7 @@ int	main(int argc, char **argv, char **env)
 	if (pid == 0)
 	{
 		args.pid = 2;
-		file_id = open_fds(args);
+		file_id = open_fds(args, arr);
 		dup2(file_id, 0);
 		dup2(pipis[1], 1);
 		close(pipis[0]);
@@ -37,14 +37,14 @@ int	main(int argc, char **argv, char **env)
 	}
 	else
 	{
-		wait(NULL);
 		args.pid = 3;
-		file_id = open_fds(args);
+		file_id = open_fds(args, arr);
 		dup2(pipis[0], 0);
 		dup2(file_id, 1);
 		close(pipis[1]);
 		try_paths(arr, args);
 	}
+	wait(NULL);
 	return (0);
 }
 
@@ -69,7 +69,7 @@ char	**find_path(char **env)
 	return (arr);
 }
 
-int	open_fds(args args)
+int	open_fds(args args, char **arr)
 {
 	int	fd;
 	int	i;
@@ -82,11 +82,12 @@ int	open_fds(args args)
 	else
 	{
 		i = args.argc - 1;
-		fd = open(args.argv[i], O_RDWR | O_CREAT);
+		fd = open(args.argv[i], O_RDWR | O_CREAT | O_TRUNC, 0777);
 
 	}
 	if (errno != 0)
 	{
+		free_str_arrs(arr);
 		perror("pipex");
 		exit(errno);
 	}
