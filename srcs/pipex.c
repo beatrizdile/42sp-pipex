@@ -4,20 +4,21 @@
 int	main(int argc, char **argv, char **env)
 {
 	int		pid;
+	int		pipis[2];
+	int		file_id;
 	char	**arr;
 	args	args;
 
+	if (argc != 5)
+		exit(1);
+	if (pipe(pipis) == -1)
+	{
+		perror("pipex");
+		exit(errno);
+	}
 	args.argc = argc;
 	args.argv = argv;
 	args.env = env;
-	// int	fd[2];
-	if (argc != 5)
-		exit(1);
-	// if (pipe(fd) == -1)
-	// {
-	// 	perror("pipex");
-	// 	exit(errno);
-	// }
 	arr = find_path(env);
 	pid = fork();
 	if (pid == -1)
@@ -27,15 +28,22 @@ int	main(int argc, char **argv, char **env)
 	}
 	if (pid == 0)
 	{
-		args.pid = 0;
+		args.pid = 2;
+		file_id = open_fds(args);
+		dup2(file_id, 0);
+		dup2(pipis[1], 1);
+		close(pipis[0]);
 		try_paths(arr, args);
 	}
 	else
 	{
 		wait(NULL);
-		args.pid = 1;
+		args.pid = 3;
+		file_id = open_fds(args);
+		dup2(pipis[0], 0);
+		dup2(file_id, 1);
+		close(pipis[1]);
 		try_paths(arr, args);
-		free_paths(arr);
 	}
 	return (0);
 }
@@ -61,17 +69,28 @@ char	**find_path(char **env)
 	return (arr);
 }
 
-void	free_paths(char **arr)
+int	open_fds(args args)
 {
-	int	j;
+	int	fd;
+	int	i;
 
-	j = 0;
-	while (arr[j])
+	if (args.pid == 2)
 	{
-		free(arr[j]);
-		j++;
+		i = 1;
+		fd = open(args.argv[i], O_RDWR);
 	}
-	free(arr);
+	else
+	{
+		i = args.argc - 1;
+		fd = open(args.argv[i], O_RDWR | O_CREAT);
+
+	}
+	if (errno != 0)
+	{
+		perror("pipex");
+		exit(errno);
+	}
+	return (fd);
 }
 
 int	try_paths(char **arr, args args)
@@ -84,26 +103,35 @@ int	try_paths(char **arr, args args)
 	i = 0;
 	while (arr[i])
 	{
-		strlen = ft_strlen(arr[i]) + ft_strlen(args.argv[2]) + 2;
+		strlen = ft_strlen(arr[i]) + ft_strlen(args.argv[args.pid]) + 2;
+		e_arr = ft_split(args.argv[args.pid], ' ');
 		copy = ft_calloc(strlen, sizeof(char));
 		ft_strlcat(copy, arr[i], strlen);
 		ft_strlcat(copy, "/", strlen);
-
-		ft_strlcat(copy, args.argv[2], strlen);
-		ft_printf("%s\n", copy);
-		e_arr = ft_split(args.argv[2], ' ');
+		ft_strlcat(copy, e_arr[0], strlen);
 		execve(copy, e_arr, args.env);
-		free(e_arr);
+		free_str_arrs(e_arr);
 		free(copy);
 		i++;
 	}
-	free_paths(arr);
+	free_str_arrs(arr);
 	perror("pipex");
 	return (0);
 }
 
+void	free_str_arrs(char **arr)
+{
+	int	j;
 
-// adicionar flags
+	j = 0;
+	while (arr[j])
+	{
+		free(arr[j]);
+		j++;
+	}
+	free(arr);
+}
+
 // mudar entrada e saida padrão
 // input e output de arquivo
-// valgrind --leak-check=full --leak-check=full --show-leak-kinds=all --trace-children=yes --trace-children-skip=*/bin/* ./pipex input.txt ls pwd output.txt
+// valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --trace-children=yes --trace-children-skip='*/bin/*,*/sbin/*' ./pipex input.txt "grep 42" "grep sil" output.txt
