@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bedos-sa <bedos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 23:49:22 by bedos-sa          #+#    #+#             */
-/*   Updated: 2023/08/10 13:22:12 by bedos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/11 18:41:36 by bedos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # include <errno.h>
 # include <fcntl.h>
@@ -21,18 +21,21 @@
 
 typedef struct t_args
 {
+	int		i;
 	int		argc;
 	int		pid;
+	int		last_pi;
+	int		pipis[2];
 	char	**arr;
 	char	**argv;
 	char	**env;
-	char	**pipis;
 }			t_args;
 
 char		**find_path(char **env);
-int			try_paths(char **arr, t_args t_args);
+void		try_paths(t_args *t_args);
 void		free_str_arrs(char **arr);
-int			open_fds(t_args t_args, char **arr);
-void		exec_process(int pid, char **arr, int *pipis, t_args args);
+int			open_fds(t_args *t_args);
+void		commands_fork(t_args *args);
+void		first_command(t_args *args);
 
 #endif
