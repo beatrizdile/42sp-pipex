@@ -6,7 +6,7 @@
 /*   By: bedos-sa <bedos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 10:27:48 by bedos-sa          #+#    #+#             */
-/*   Updated: 2023/08/11 20:55:47 by bedos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/12 15:53:35 by bedos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,20 @@ void	free_str_arrs(char **arr)
 		j++;
 	}
 	free(arr);
+}
+
+void	recycle_pipe(t_args *args)
+{
+	if (args->i % 2 == 0)
+	{
+		close(args->pipes[0]);
+		close(args->pipes[1]);
+		pipe(args->pipes);
+	}
+	else
+	{
+		close(args->pipis[0]);
+		close(args->pipis[1]);
+		pipe(args->pipis);
+	}
 }
