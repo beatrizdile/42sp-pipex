@@ -6,7 +6,7 @@
 /*   By: bedos-sa <bedos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 10:27:48 by bedos-sa          #+#    #+#             */
-/*   Updated: 2023/08/12 17:31:21 by bedos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/12 19:01:57 by bedos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,17 @@ char	**find_path(char **env)
 
 int	open_fds(t_args *args)
 {
-	int	fd;
+	int		fd;
 
 	if (args->i == 2)
 		fd = open(args->argv[1], O_RDWR);
 	else if (args->i == args->argc - 2)
-		fd = open(args->argv[args->argc - 1], O_RDWR | O_CREAT | O_TRUNC, 0777);
+	{
+		if (ft_strncmp(args->argv[1], "here_doc", 9) == 0)
+			fd = open(args->argv[args->argc - 1], O_RDWR | O_CREAT | O_APPEND, 0777);
+		else
+			fd = open(args->argv[args->argc - 1], O_RDWR | O_CREAT | O_TRUNC, 0777);
+	}
 	if (errno != 0)
 	{
 		free_str_arrs(args->arr);

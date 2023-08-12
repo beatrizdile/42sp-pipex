@@ -6,7 +6,7 @@
 /*   By: bedos-sa <bedos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 10:26:42 by bedos-sa          #+#    #+#             */
-/*   Updated: 2023/08/12 17:47:17 by bedos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/12 19:16:33 by bedos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,25 @@ int	main(int argc, char **argv, char **env)
 void	commands_fork(t_args *args)
 {
 	pid_t	pid;
+	char	*str;
 
 	args->i = 2;
+	if (ft_strncmp(args->argv[1], "here_doc", 9) == 0)
+	{
+		while(1)
+		{
+			str = get_next_line(0);
+			if (ft_strncmp(str, args->argv[2], ft_strlen(args->argv[2])) == 0 \
+				&& ft_strlen(str) == ft_strlen(args->argv[2]) + 1)
+			{
+				free(str);
+				break ;
+			}
+			ft_putstr_fd(str, args->pipis[1]);
+			free(str);
+		}
+		args->i++;
+	}
 	while (args->i <= args->argc - 2)
 	{
 		pid = fork();
