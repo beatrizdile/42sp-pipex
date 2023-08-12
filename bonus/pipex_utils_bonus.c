@@ -6,7 +6,7 @@
 /*   By: bedos-sa <bedos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 10:27:48 by bedos-sa          #+#    #+#             */
-/*   Updated: 2023/08/12 15:53:35 by bedos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/12 17:31:21 by bedos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	open_fds(t_args *args)
 	if (errno != 0)
 	{
 		free_str_arrs(args->arr);
-		perror("pipex");
 		exit(errno);
 	}
 	return (fd);
@@ -67,7 +66,7 @@ void	try_paths(t_args *args)
 		ft_strlcat(copy, args->arr[i], strlen);
 		ft_strlcat(copy, "/", strlen);
 		ft_strlcat(copy, e_arr[0], strlen);
-		if (access(copy, F_OK) == 0)	
+		if (access(copy, F_OK) == 0)
 			execve(copy, e_arr, args->env);
 		free_str_arrs(e_arr);
 		free(copy);

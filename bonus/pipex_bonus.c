@@ -6,7 +6,7 @@
 /*   By: bedos-sa <bedos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 10:26:42 by bedos-sa          #+#    #+#             */
-/*   Updated: 2023/08/12 16:00:48 by bedos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/12 17:47:17 by bedos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,46 +50,10 @@ void	commands_fork(t_args *args)
 			perror("pipex");
 			exit(errno);
 		}
-		if (args->i < args->argc - 2)
-			recycle_pipe(args);
+		recycle_pipe(args);
 		args->i++;
 	}
 	wait(NULL);
-}
-
-void	first_command(t_args *args)
-{
-	int	file_fd;
-	file_fd = open_fds(args);
-	dup2(file_fd, 0);
-	dup2(args->pipis[1], 1);
-	close(file_fd);
-}
-
-void	middle_command(t_args *args)
-{
-	if (args->i % 2 == 0)
-	{
-		dup2(args->pipes[0], 0);
-		dup2(args->pipis[1], 1);
-	}
-	else
-	{
-		dup2(args->pipis[0], 0);
-		dup2(args->pipes[1], 1);
-	}
-}
-
-void	last_command(t_args *args)
-{
-	int	file_fd;
-	file_fd = open_fds(args);
-	if (args->i % 2 == 0)
-		dup2(args->pipes[0], 0);
-	else
-		dup2(args->pipis[0], 0);
-	dup2(file_fd, 1);
-	close(file_fd);
 }
 
 void	close_pipes(t_args *args)
@@ -99,6 +63,3 @@ void	close_pipes(t_args *args)
 	close(args->pipes[0]);
 	close(args->pipes[1]);
 }
-
-//valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --trace-children=yes --trace-children-skip='*/bin/*,*/sbin/*' ./pipex_bonus input.txt "grep 42" "grep sil" "grep bia" output.txt
-//valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --trace-children=yes --trace-children-skip='*/bin/*,*/sbin/*' ./pipex_bonus input.txt "grep 42" "pwd" "ls" output.txt
