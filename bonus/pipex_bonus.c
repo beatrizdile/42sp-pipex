@@ -6,7 +6,7 @@
 /*   By: bedos-sa <bedos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 10:26:42 by bedos-sa          #+#    #+#             */
-/*   Updated: 2023/08/12 19:16:33 by bedos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/12 20:37:49 by bedos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	main(int argc, char **argv, char **env)
 	args.argc = argc;
 	args.argv = argv;
 	args.env = env;
+	args.i = 2;
 	pipe(args.pipis);
 	pipe(args.pipes);
 	commands_fork(&args);
@@ -27,28 +28,30 @@ int	main(int argc, char **argv, char **env)
 	return (0);
 }
 
-void	commands_fork(t_args *args)
+void	here_doc(t_args	*args)
 {
-	pid_t	pid;
-	char	*str;
+	char	str[100000];
 
-	args->i = 2;
 	if (ft_strncmp(args->argv[1], "here_doc", 9) == 0)
 	{
-		while(1)
+		while (1)
 		{
-			str = get_next_line(0);
+			ft_bzero(&str, 100000);
+			read(0, str, 100000);
 			if (ft_strncmp(str, args->argv[2], ft_strlen(args->argv[2])) == 0 \
 				&& ft_strlen(str) == ft_strlen(args->argv[2]) + 1)
-			{
-				free(str);
 				break ;
-			}
 			ft_putstr_fd(str, args->pipis[1]);
-			free(str);
 		}
 		args->i++;
 	}
+}
+
+void	commands_fork(t_args *args)
+{
+	pid_t	pid;
+
+	here_doc(args);
 	while (args->i <= args->argc - 2)
 	{
 		pid = fork();
@@ -64,7 +67,7 @@ void	commands_fork(t_args *args)
 			close_pipes(args);
 			try_paths(args);
 			free_str_arrs(args->arr);
-			perror("pipex");
+			perror("pipexXXXX");
 			exit(errno);
 		}
 		recycle_pipe(args);
