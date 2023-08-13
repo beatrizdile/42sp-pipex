@@ -6,7 +6,7 @@
 /*   By: bedos-sa <bedos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 10:26:42 by bedos-sa          #+#    #+#             */
-/*   Updated: 2023/08/13 15:01:38 by bedos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/13 15:26:40 by bedos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,3 @@ void	close_pipes(t_args *args)
 	close(args->pipes[0]);
 	close(args->pipes[1]);
 }
-
-
-//path absoluto
