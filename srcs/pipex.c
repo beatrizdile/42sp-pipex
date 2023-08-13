@@ -6,7 +6,7 @@
 /*   By: bedos-sa <bedos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 10:26:42 by bedos-sa          #+#    #+#             */
-/*   Updated: 2023/08/10 10:46:28 by bedos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/13 16:28:22 by bedos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,29 @@ int	main(int argc, char **argv, char **env)
 	args.env = env;
 	arr = find_path(env);
 	pid = fork();
-	if (pid == 0)
-		exec_process(0, arr, pipis, args);
-	else
-		exec_process(1, arr, pipis, args);
-	wait(NULL);
+	processes(pid, arr, pipis, &args);
 	return (0);
+}
+
+void	processes(int pid, char **arr, int *pipis, t_args *args)
+{
+	char	**e_arr;
+
+	if (pid == 0)
+	{
+		e_arr = ft_split(args->argv[0], ' ');
+		if (access(e_arr[0], F_OK) == 0)
+			execve(e_arr[0], e_arr, args->env);
+		free_str_arrs(e_arr);
+		exec_process(0, arr, pipis, *args);
+	}
+	else
+	{
+		e_arr = ft_split(args->argv[1], ' ');
+		if (access(e_arr[0], F_OK) == 0)
+			execve(e_arr[0], e_arr, args->env);
+		free_str_arrs(e_arr);
+		exec_process(1, arr, pipis, *args);
+	}
+	wait(NULL);
 }
