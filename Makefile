@@ -6,12 +6,11 @@
 #    By: bedos-sa <bedos-sa@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/12 10:33:46 by bedos-sa          #+#    #+#              #
-#    Updated: 2023/08/13 14:42:13 by bedos-sa         ###   ########.fr        #
+#    Updated: 2023/08/13 16:00:23 by bedos-sa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
-NAME_BONUS = pipex
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g 
 LIBFT = ./libft
@@ -33,15 +32,17 @@ all: $(NAME)
 	@$(CC) $(CFLAGS) -I./include -c $< -o $@
 
 $(NAME): $(OBJS)
+ifneq ($(wildcard $(OBJS_BONUS)),)
+	$(RM) $(OBJS_BONUS)
+endif
 	make -C $(LIBFT)
 	$(CC) $(OBJS) $(CFLAGS) $(LIBFT)/libft.a -O3 -g3 -L -lft -o $(NAME)
 
-bonus: $(NAME_BONUS)
-	@echo "$(green)SUCCESS!!!$(reset)"
-
-$(NAME_BONUS): $(OBJS_BONUS)
-	make -C $(LIBFT)
-	$(CC) $(OBJS_BONUS) $(CFLAGS) $(LIBFT)/libft.a -O3 -g3 -L -lft -o $(NAME_BONUS)
+bonus: $(NAME)
+ifneq ($(wildcard $(OBJS)),)
+	$(RM) $(OBJS)
+endif
+	make FILES="$(FILES_BONUS)"
 
 clean:
 	make clean -C $(LIBFT)
@@ -49,7 +50,7 @@ clean:
 
 fclean: clean
 	make fclean -C $(LIBFT)
-	$(RM) $(NAME) $(NAME_BONUS)
+	$(RM) $(NAME) $(NAME)
 
 re: fclean all
 
