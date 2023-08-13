@@ -6,7 +6,7 @@
 /*   By: bedos-sa <bedos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 10:26:42 by bedos-sa          #+#    #+#             */
-/*   Updated: 2023/08/12 20:37:49 by bedos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/13 15:01:38 by bedos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,17 @@ int	main(int argc, char **argv, char **env)
 {
 	t_args	args;
 
-	args.argc = argc;
-	args.argv = argv;
-	args.env = env;
-	args.i = 2;
-	pipe(args.pipis);
-	pipe(args.pipes);
-	commands_fork(&args);
-	close_pipes(&args);
+	if (argc >= 5)
+	{
+		args.argc = argc;
+		args.argv = argv;
+		args.env = env;
+		args.i = 2;
+		pipe(args.pipis);
+		pipe(args.pipes);
+		commands_fork(&args);
+		close_pipes(&args);
+	}
 	return (0);
 }
 
@@ -67,7 +70,7 @@ void	commands_fork(t_args *args)
 			close_pipes(args);
 			try_paths(args);
 			free_str_arrs(args->arr);
-			perror("pipexXXXX");
+			ft_putstr_fd("pipex: command not found\n", 2);
 			exit(errno);
 		}
 		recycle_pipe(args);
@@ -83,3 +86,6 @@ void	close_pipes(t_args *args)
 	close(args->pipes[0]);
 	close(args->pipes[1]);
 }
+
+
+//path absoluto

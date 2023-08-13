@@ -6,12 +6,12 @@
 #    By: bedos-sa <bedos-sa@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/12 10:33:46 by bedos-sa          #+#    #+#              #
-#    Updated: 2023/08/12 16:21:00 by bedos-sa         ###   ########.fr        #
+#    Updated: 2023/08/13 14:42:13 by bedos-sa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
-NAME_BONUS = pipex_bonus
+NAME_BONUS = pipex
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g 
 LIBFT = ./libft
