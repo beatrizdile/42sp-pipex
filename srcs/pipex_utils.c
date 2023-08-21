@@ -6,7 +6,7 @@
 /*   By: bedos-sa <bedos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 10:27:48 by bedos-sa          #+#    #+#             */
-/*   Updated: 2023/08/13 16:18:39 by bedos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/13 17:28:46 by bedos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	exec_process(int pid, char **arr, int *pipis, t_args args)
 		dup2(file_id, 0);
 		dup2(pipis[1], 1);
 		close(pipis[0]);
+		absolute_path(0, args);
 		try_paths(arr, args);
 	}
 	else
@@ -33,6 +34,7 @@ void	exec_process(int pid, char **arr, int *pipis, t_args args)
 		dup2(pipis[0], 0);
 		dup2(file_id, 1);
 		close(pipis[1]);
+		absolute_path(1, args);
 		try_paths(arr, args);
 	}
 }

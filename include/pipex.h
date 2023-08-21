@@ -6,7 +6,7 @@
 /*   By: bedos-sa <bedos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 23:49:22 by bedos-sa          #+#    #+#             */
-/*   Updated: 2023/08/13 16:20:41 by bedos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/13 17:18:02 by bedos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,6 @@ void		free_str_arrs(char **arr);
 int			open_fds(t_args t_args, char **arr);
 void		exec_process(int pid, char **arr, int *pipis, t_args args);
 void		processes(int pid, char **arr, int *pipis, t_args *args);
+void		absolute_path(int pid, t_args args);
 
 #endif
