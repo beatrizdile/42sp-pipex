@@ -6,7 +6,7 @@
 </h2>
 <h2 align=center>
 
-  ![pipex Logo](https://game.42sp.org.br/static/assets/achievements/pipexm.png)
+  ![pipex Logo](https://github.com/beatrizdile/beatrizdile-utils/blob/master/pipexm.png)
 </h2>
 
 The **pipex** project aims to provide a program that emulates the behavior of the Unix shell command pipex, allowing users to redirect the output of one command as the input to another, similar to using pipes in the command line.
